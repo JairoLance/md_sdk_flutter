@@ -1,2 +1,2 @@
-jdk:
-  - openjdk8
+install:
+  - ./gradlew clean assembleRelease

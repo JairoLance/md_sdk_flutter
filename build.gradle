@@ -1,69 +1,40 @@
+// build.gradle
 buildscript {
+    ext.kotlin_version = '1.7.10'
     repositories {
-        jcenter()
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
 
 allprojects {
-
-repositories {
-          	 maven { url 'https://jitpack.io' }
-        	 mavenCentral()
-}
-    
-apply plugin: "java"
-apply plugin: "maven"
-
-
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/']
-        }
-        resources {
-            
-        }
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 
+apply plugin: 'maven-publish'
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+task sourceJar(type: Jar) {
+    from fileTree('sdk/android/src/main/java')
     classifier = 'sources'
-    from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-// To specify a license in the pom:
-install {
-  repositories.mavenInstaller {
-    pom.project {
-      licenses {
-        license {
-          name 'The Apache Software License, Version 2.0'
-          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          distribution 'repo'
+afterEvaluate {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.release
+                artifact sourceJar
+            }
         }
-      }
     }
-  }
 }
-
-}
-
-

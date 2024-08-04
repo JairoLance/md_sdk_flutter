@@ -1,2 +1,9 @@
-// settings.gradle
-include ':android'
+//include "scarabei-red-flutter"
+//include "scarabei-api-flutter"
+include "sdk"
+
+
+
+
+
+
